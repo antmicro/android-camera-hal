@@ -1,0 +1,76 @@
+Minimal working V4L2-based Android Camera HAL driver.
+
+HAL version: 3.0
+Module version: 2.3
+Camera API version: 2
+
+
+
+LIMITATIONS
+-----------
+
+* Supports only one camera
+
+* Tested only on Tegra K1, using one specific camera and a few times a webcam.
+
+* No parameter control, most of the reported specs are hardcoded.
+
+* Resolution detection is limited up to 1920x1080. See availableResolutions()
+  in V4l2Device.cpp.
+
+
+
+WORKAROUNDS/BUILD TIME CONFIGURATION
+------------------------------------
+
+In Android.mk there are some flags which control how the driver works. Some
+of them might not always work.
+
+
+  LOCAL_CFLAGS += -DV4L2DEVICE_FPS_LIMIT=<NNN>
+
+  <NNN> is positive integer. Limits framerate at the driver level. Helps when
+  the kernel's V4L2 driver allows to read the buffers faster than it fills them
+  with a new frames. Comment out to disable the limit.
+
+
+  LOCAL_CFLAGS += -DV4L2DEVICE_BUF_COUNT=<NNN>
+
+  <NNN> is positive integer (4 by default). V4L2 buffers count.
+
+
+  LOCAL_CFLAGS += -DV4L2DEVICE_PIXEL_FORMAT=V4L2_PIX_FMT_UYVY
+  #LOCAL_CFLAGS += -DV4L2DEVICE_PIXEL_FORMAT=V4L2_PIX_FMT_YUYV
+
+  V4L2 source color format.
+
+
+  LOCAL_CFLAGS += -DV4L2DEVICE_OPEN_ONCE
+
+  Opens and initializes /dev/video0 during boot time. Comment out to open/close
+  the device when a camera app is opened/closed.
+
+
+  LOCAL_CFLAGS += -DV4L2DEVICE_USE_POLL
+
+  Use poll() before dequeueing a buffer.
+
+
+
+BOOT TIME CONFIGURATION
+-----------------------
+
+The "ro.camera.v4l2device.resolution" system property allows to force one single
+resolution (must be supported by V4L2). The value is in format "WIDTHxHEIGHT".
+
+
+
+HOW TO BUILD
+------------
+
+In your target's makefile (e.g. device/mycompany/mydevice/mydevice.mk) add:
+
+  PRODUCT_PACKAGES += camera.$(TARGET_BOARD_PLATFORM)
+  PRODUCT_PACKAGES += media_profiles.xml
+
+and just build Android.
