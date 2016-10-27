@@ -11,7 +11,7 @@ LIMITATIONS
 
 * Supports only one camera
 
-* Tested only on Tegra K1, using one specific camera and a few times a webcam.
+* Tested only on Tegra K1, using one specific camera and a webcam.
 
 * No parameter control, most of the reported specs are hardcoded.
 
@@ -36,7 +36,7 @@ of them might not always work.
 
   LOCAL_CFLAGS += -DV4L2DEVICE_BUF_COUNT=<NNN>
 
-  <NNN> is positive integer (4 by default). V4L2 buffers count.
+  <NNN> is a positive integer (4 by default) - V4L2 buffers count.
 
 
   LOCAL_CFLAGS += -DV4L2DEVICE_PIXEL_FORMAT=V4L2_PIX_FMT_UYVY
@@ -61,7 +61,7 @@ BOOT TIME CONFIGURATION
 -----------------------
 
 The "ro.camera.v4l2device.resolution" system property allows to force one single
-resolution (must be supported by V4L2). The value is in format "WIDTHxHEIGHT".
+resolution (must be supported by V4L2). The value is in the "WIDTHxHEIGHT" format.
 
 
 
